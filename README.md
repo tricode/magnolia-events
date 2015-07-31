@@ -2,7 +2,7 @@
 Blog module for [Magnolia cms](http://www.magnolia-cms.com).
 
 In this module we provide a Content app to create/edit/delete events. 
-Create your own website components with nl.tricode.magnolia.blogs.templates.BlogRenderableDefinition
+Create your own website components with nl.tricode.magnolia.events.templates.EventsRenderableDefinition
 to add to your Magnolia website.
 
 ## Prerequisites
