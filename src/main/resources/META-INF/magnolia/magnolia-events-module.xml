@@ -26,6 +26,10 @@
           <version>1.0/*</version>
           <optional>true</optional>
       </dependency>
+      <dependency>
+          <name>contacts</name>
+          <version>1.0/*</version>
+      </dependency>
   </dependencies>
 
     <repositories>
