@@ -1,7 +1,8 @@
 # magnolia-events
-Blog module for [Magnolia cms](http://www.magnolia-cms.com).
+Event app for [Magnolia cms](http://www.magnolia-cms.com).
 
-In this module we provide a Content app to create/edit/delete events. 
+In this module we provide a content app to create/edit/delete events fast and easy. The events can be unpublished automatically by choosing a unpublish date at the moment you create the event.
+
 Create your own website components with nl.tricode.magnolia.events.templates.EventsRenderableDefinition
 to add to your Magnolia website.
 
