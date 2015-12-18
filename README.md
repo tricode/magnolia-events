@@ -14,3 +14,8 @@ to add to your Magnolia website.
 ##License
 Copyright (c) 2015 Tricode and contributors. Released under a [GNUv3 license](https://github.com/tricode/magnolia-events/blob/master/license.txt).
 
+
+##Release notes 1.1.1.
+* Update to Java 7.
+* Update to Magnolia 5.4.3.
+* Update Magnolia scheduler module 2.2.2.
