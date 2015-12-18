@@ -18,23 +18,19 @@
  */
 package nl.tricode.magnolia.events.templates;
 
-import info.magnolia.cms.util.QueryUtil;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.context.WebContext;
 import info.magnolia.jcr.util.ContentMap;
-import info.magnolia.jcr.wrapper.I18nNodeWrapper;
 import info.magnolia.rendering.model.RenderingModel;
 import info.magnolia.rendering.model.RenderingModelImpl;
 import info.magnolia.rendering.template.RenderableDefinition;
 import info.magnolia.templating.functions.TemplatingFunctions;
-import nl.tricode.magnolia.events.util.EventsWorkspaceUtil;
+import nl.tricode.magnolia.events.util.JcrUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.query.Query;
 import java.util.*;
 
 public class EventsRenderableDefinition<RD extends RenderableDefinition> extends RenderingModelImpl {
@@ -50,7 +46,7 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
 	public EventsRenderableDefinition(Node content, RD definition, RenderingModel<?> parent, TemplatingFunctions templatingFunctions) {
 		super(content, definition, parent);
 		this.templatingFunctions = templatingFunctions;
-		filter = new HashMap<String, String>();
+		filter = new HashMap<>();
 	}
 
 	@Override
@@ -80,80 +76,7 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
 		if (StringUtils.isNumeric(maxResultSize)) {
 			resultSize = Integer.parseInt(maxResultSize);
 		}
-		final String sqlBlogItems = buildQuery(path, nodeType);
-		return templatingFunctions.asContentMapList(getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
-	}
-
-	/**
-	 * Query blog items using JCR SQL2 syntax.
-	 *
-	 * @param query         Query string
-	 * @param maxResultSize Max results returned
-	 * @param pageNumber    paging number
-	 * @return List<Node> List of blog nodes
-	 * @throws javax.jcr.RepositoryException
-	 */
-	public static List<Node> getWrappedNodesFromQuery(String query, int maxResultSize, int pageNumber, String nodeTypeName) throws RepositoryException {
-		return getWrappedNodesFromQuery(query, maxResultSize, pageNumber, nodeTypeName, EventsWorkspaceUtil.COLLABORATION);
-	}
-
-	/**
-	 * Query items using JCR SQL2 syntax.
-	 *
-	 * @param query         Query string
-	 * @param maxResultSize Max results returned
-	 * @param pageNumber    paging number
-	 * @return List<Node> List of nodes
-	 * @throws javax.jcr.RepositoryException
-	 */
-	public static List<Node> getWrappedNodesFromQuery(String query, int maxResultSize, int pageNumber, String nodeTypeName, String workspace) throws RepositoryException {
-		final List<Node> itemsListPaged = new ArrayList<Node>(0);
-		final NodeIterator items = QueryUtil.search(workspace, query, Query.JCR_SQL2, nodeTypeName);
-
-		// Paging result set
-		final int startRow = (maxResultSize * (pageNumber - 1));
-		if (startRow > 0) {
-			try {
-				items.skip(startRow);
-			} catch (NoSuchElementException e) {
-				//log.error("No more blog items found beyond this item number: " + startRow);
-			}
-		}
-
-		int count = 1;
-		while (items.hasNext() && count <= maxResultSize) {
-			itemsListPaged.add(new I18nNodeWrapper(items.nextNode()));
-			count++;
-		}
-
-		return itemsListPaged;
-	}
-
-	public static List<Node> getWrappedNodesFromQuery(String query, String nodeTypeName, String workspace) throws RepositoryException {
-		final List<Node> itemsListPaged = new ArrayList<Node>(0);
-		final NodeIterator items = QueryUtil.search(workspace, query, Query.JCR_SQL2, nodeTypeName);
-
-		while (items.hasNext()) {
-			itemsListPaged.add(new I18nNodeWrapper(items.nextNode()));
-		}
-
-		return itemsListPaged;
-	}
-
-	public static String buildQuery(String path, boolean useFilters, String customFilters, String contentType) {
-		String filters = StringUtils.EMPTY;
-		if (useFilters) {
-			filters = customFilters;
-		}
-		return "SELECT p.* FROM [" + contentType + "] AS p " +
-				  "WHERE ISDESCENDANTNODE(p, '" + StringUtils.defaultIfEmpty(path, "/") + "') " +
-				  filters +
-				  "ORDER BY p.[mgnl:created] desc";
-	}
-
-	public static String buildQuery(String path, String contentType) {
-		return "SELECT p.* FROM [" + contentType + "] AS p " +
-				  "WHERE ISDESCENDANTNODE(p, '" + StringUtils.defaultIfEmpty(path, "/") + "') " +
-				  "ORDER BY p.[mgnl:created] desc";
+		final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType);
+		return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
 	}
 }
