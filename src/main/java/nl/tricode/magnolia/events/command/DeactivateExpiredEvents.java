@@ -18,18 +18,17 @@
  */
 package nl.tricode.magnolia.events.command;
 
-import info.magnolia.cms.beans.config.ContentRepository;
 import info.magnolia.cms.exchange.ExchangeException;
 import info.magnolia.cms.exchange.Syndicator;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.Rule;
 import info.magnolia.commands.impl.BaseRepositoryCommand;
 import info.magnolia.context.Context;
-import info.magnolia.objectfactory.Components;
 import nl.tricode.magnolia.events.templates.EventsRenderableDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import java.util.List;
@@ -44,15 +43,22 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
 	private static final String DEACTIVATE_PROPERTY = "unpublishDate";
 	private static final String WORKSPACE = "collaboration";
 
+	private Syndicator syndicator;
+
+	@Inject
+	public DeactivateExpiredEvents(Syndicator syndicator) {
+		this.syndicator = syndicator;
+	}
+
 	@Override
 	public boolean execute(Context context) {
 		try {
-			// Get a list of all expired event nodes.
+			/** Get a list of all expired event nodes. */
 			List<Node> expiredNodes = EventsRenderableDefinition
 					  .getWrappedNodesFromQuery(EventsRenderableDefinition.buildQuery(EVENT, DEACTIVATE_PROPERTY), EVENT, WORKSPACE);
 			log.debug("eventNodes size [" + expiredNodes.size() + "].");
 
-			// Unpublish expired nodes.
+			/** Unpublish expired nodes. */
 			unpublishExpiredNodes(context, expiredNodes);
 		} catch (Exception e) {
 			log.error("Exception: ", e);
@@ -62,7 +68,7 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
 	}
 
 	/**
-	 * This method unpublishes the news nodes that are expired.
+	 * This method unpublishes the eventCalendar nodes that are expired.
 	 *
 	 * @param context
 	 * @param expiredNodes
@@ -70,16 +76,16 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
 	 * @throws info.magnolia.cms.exchange.ExchangeException
 	 */
 	private void unpublishExpiredNodes(Context context, List<Node> expiredNodes) {
-		Syndicator syndicator = Components.getComponentProvider().newInstance(Syndicator.class);
-		syndicator.init(context.getUser(), this.getRepository(), ContentRepository.getDefaultWorkspace(this.getRepository()), new Rule());
+		/** Syndicator init method still needed because there is no other way to set user and workspace.
+		 * Magnolia does the same in there activation module. */
+		syndicator.init(context.getUser(), this.getRepository(), WORKSPACE, new Rule());
 
 		try {
-			//Looping the nodes to unpublish
+			/** Looping the nodes to unpublish */
 			for (Node expiredNode : expiredNodes) {
-				//Saving the removal of the propery on the session because on the node is deprecated.
-				//TODO using new Node object and syndicator by inversion of control (Constructor injection)
-
+				/** Saving the removal of the propery on the session because on the node is deprecated. */
 				syndicator.deactivate(ContentUtil.asContent(expiredNode));
+
 				log.debug("Node [" + expiredNode.getName() + "  " + expiredNode.getPath() + "] unpublished.");
 			}
 		} catch (RepositoryException e) {
