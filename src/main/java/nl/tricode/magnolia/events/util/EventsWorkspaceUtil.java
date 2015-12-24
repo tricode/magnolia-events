@@ -23,9 +23,6 @@ import info.magnolia.cms.core.Path;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-/**
- * Created by mvdmark on 31-7-2015.
- */
 public class EventsWorkspaceUtil {
 	public static final String COLLABORATION = "collaboration";
 

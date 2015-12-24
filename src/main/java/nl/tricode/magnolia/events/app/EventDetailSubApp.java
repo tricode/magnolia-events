@@ -34,11 +34,7 @@ import info.magnolia.ui.vaadin.integration.contentconnector.ContentConnector;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-/**
- * Created by mvdmark on 31-7-2015.
- */
 public class EventDetailSubApp extends DetailSubApp {
-
 	@Inject
 	public EventDetailSubApp(final SubAppContext subAppContext, final ContentSubAppView view, @Named(AdmincentralEventBus.NAME) EventBus adminCentralEventBus,
 	                        DetailEditorPresenter workbench, SimpleTranslator i18n, ContentConnector contentConnector) {

@@ -20,9 +20,7 @@ package nl.tricode.magnolia.events;
 
 import info.magnolia.jcr.util.NodeTypes;
 
-/**
- * Created by mvdmark on 26-11-2014.
- */
+@SuppressWarnings("unused") //Node representation in java.
 public class EventNodeTypes {
     /**
      * Represents the nodeType mgnl:eventCalendarItem.

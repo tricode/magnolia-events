@@ -39,7 +39,7 @@ public class EventsVersionHandler extends DefaultModuleVersionHandler {
 
 	@Override
 	protected List<Task> getStartupTasks(InstallContext ctx) {
-		List<Task> startupTasks = new ArrayList<Task>(0);
+		List<Task> startupTasks = new ArrayList<>(0);
 		startupTasks.addAll(super.getStartupTasks(ctx));
 
 		startupTasks.addAll(getOptionalTasks(ctx));
@@ -49,10 +49,10 @@ public class EventsVersionHandler extends DefaultModuleVersionHandler {
 
 	@Override
 	protected List<Task> getDefaultUpdateTasks(Version forVersion) {
-		final List<Task> tasks = new ArrayList<Task>();
+		final List<Task> tasks = new ArrayList<>();
 		tasks.addAll(super.getDefaultUpdateTasks(forVersion));
 
-		// Always update templates, resources no matter what version is updated!
+		/** Always update templates, resources no matter what version is updated! */
 		tasks.add(new UpdateModuleBootstrapTask(MODULE_NAME, "dialogs"));
 
 		return tasks;
@@ -60,11 +60,11 @@ public class EventsVersionHandler extends DefaultModuleVersionHandler {
 
 	/**
 	 * Method of installing optional Tasks
-	 * @param ctx
-	 * @return
+	 * @param ctx InstallContext
+	 * @return a list of optional tasks
 	 */
 	private List<Task> getOptionalTasks(InstallContext ctx) {
-		List<Task> tasks = new ArrayList<Task>(0);
+		List<Task> tasks = new ArrayList<>(0);
 
 		if (ctx.getHierarchyManager("config").isExist("/modules/tricode-tags")) {
 			log.info("Bootstrapping optional Tricode Tags for Tricode Event Calendar");

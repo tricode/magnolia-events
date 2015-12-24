@@ -36,11 +36,12 @@ import javax.jcr.Node;
 import java.util.List;
 
 /**
- * Created by mvdmark on 25-11-2014.
+ * @author mvdmark
  */
 public class RestorePreviousEvents extends RestoreItemPreviousVersionAction {
     private final LocationController locationController;
 
+	 @SuppressWarnings("unused") //Constructor called by Magnolia.
     public RestorePreviousEvents(RestoreItemPreviousVersionActionDefinition definition, JcrItemAdapter item,
                                CommandsManager commandsManager, @Named("admincentral") EventBus eventBus, UiContext uiContext,
                                SimpleTranslator i18n, LocationController locationController) {
@@ -50,6 +51,7 @@ public class RestorePreviousEvents extends RestoreItemPreviousVersionAction {
         this.locationController = locationController;
     }
 
+	 @SuppressWarnings("unused") //Constructor called by Magnolia.
     public RestorePreviousEvents(RestoreItemPreviousVersionActionDefinition definition, List<JcrItemAdapter> items,
                                CommandsManager commandsManager, @Named("admincentral") EventBus eventBus, UiContext uiContext,
                                SimpleTranslator i18n, LocationController locationController) {

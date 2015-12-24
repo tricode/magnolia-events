@@ -21,7 +21,7 @@ package nl.tricode.magnolia.events.action;
 import info.magnolia.ui.contentapp.browser.action.RestoreItemPreviousVersionActionDefinition;
 
 /**
- * Created by mvdmark on 25-11-2014.
+ * @Author mvdmark
  */
 public class RestorePreviousEventsDefinition extends RestoreItemPreviousVersionActionDefinition {
     private boolean showPreview = true;

@@ -36,7 +36,7 @@ import javax.jcr.RepositoryException;
 
 public class DurationColumnFormatter extends AbstractColumnFormatter<PropertyColumnDefinition> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(DurationColumnFormatter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DurationColumnFormatter.class);
 
     public DurationColumnFormatter(PropertyColumnDefinition definition) {
         super(definition);
@@ -69,13 +69,12 @@ public class DurationColumnFormatter extends AbstractColumnFormatter<PropertyCol
                 	     			.appendSuffix(" second", " seconds")
                 	     			.toFormatter();
                 		Period period = new Period(startDate, endDate);
-                		
-                		String formatted = formatter.print(period);
-                		return formatted;
+
+                		return formatter.print(period);
                 	}
                 }
             } catch (RepositoryException e) {
-                log.warn("Unable to get duration based on startDate and endDate properties", e);
+                LOG.warn("Unable to get duration based on startDate and endDate properties", e);
             }
         }
         return "N/A";

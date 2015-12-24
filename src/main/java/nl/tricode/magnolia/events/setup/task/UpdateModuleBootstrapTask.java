@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import javax.jcr.ImportUUIDBehavior;
 
 public class UpdateModuleBootstrapTask extends BootstrapResourcesTask {
-	private static final Logger log = LoggerFactory.getLogger(UpdateModuleBootstrapTask.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UpdateModuleBootstrapTask.class);
 
 	protected String modulename;
 	protected String[] resources;
@@ -35,7 +35,7 @@ public class UpdateModuleBootstrapTask extends BootstrapResourcesTask {
 	/**
 	 * Default constructor checking for standard resource paths "dialogs" and "templates" to update
 	 *
-	 * @param modulename
+	 * @param modulename name of the module.
 	 */
 	public UpdateModuleBootstrapTask(String modulename) {
 		super("Bootstrap", "Replacing configuration for " + modulename + "", ImportUUIDBehavior.IMPORT_UUID_COLLISION_REMOVE_EXISTING);
@@ -46,7 +46,7 @@ public class UpdateModuleBootstrapTask extends BootstrapResourcesTask {
 	/**
 	 * Default constructor checking for given resource paths to update
 	 *
-	 * @param modulename
+	 * @param modulename name of the module.
 	 * @param resources Comma separated string of resources paths to check "dialogs, templates"
 	 */
 	public UpdateModuleBootstrapTask(String modulename, String resources) {
@@ -56,17 +56,15 @@ public class UpdateModuleBootstrapTask extends BootstrapResourcesTask {
 	}
 
 	protected boolean acceptResource(InstallContext ctx, String resourceName) {
-
-		boolean retval = false;
-		for (int i=0; i<resources.length; i++) {
-			retval = resourceName.startsWith("/mgnl-bootstrap/" + modulename + "/" + resources[i] + "/") && resourceName.endsWith(".xml");
+		for (String resource : resources) {
+			boolean retval = resourceName.startsWith("/mgnl-bootstrap/" + modulename + "/" + resource + "/") && resourceName.endsWith(".xml");
 			if (retval) {
-				log.debug("Replacing configuration with " + resourceName);
-				return retval;
+				LOG.debug("Replacing configuration with " + resourceName);
+				return true;
 			}
 		}
 
-		log.debug("NOT replacing resource configuration " + resourceName);
-		return retval;
+		LOG.debug("NOT replacing resource configuration " + resourceName);
+		return false;
 	}
 }

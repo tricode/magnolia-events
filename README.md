@@ -20,3 +20,4 @@ Copyright (c) 2015 Tricode and contributors. Released under a [GNUv3 license](ht
 * Update to Magnolia 5.4.3.
 * Update Magnolia scheduler module 2.2.2.
 * Add IoC for syndicator in scheduled job 'Deactivate published events'
+* Separation of Jcr queries.

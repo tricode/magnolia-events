@@ -24,7 +24,6 @@ import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.Rule;
 import info.magnolia.commands.impl.BaseRepositoryCommand;
 import info.magnolia.context.Context;
-import nl.tricode.magnolia.events.templates.EventsRenderableDefinition;
 import nl.tricode.magnolia.events.util.JcrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +33,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import java.util.List;
 
-/**
- * Created by mvdmark on 3-12-2014.
- */
 public class DeactivateExpiredEvents extends BaseRepositoryCommand {
-	private static final Logger log = LoggerFactory.getLogger(DeactivateExpiredEvents.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DeactivateExpiredEvents.class);
 
 	private static final String EVENT = "mgnl:eventCalendarItem";
 	private static final String DEACTIVATE_PROPERTY = "unpublishDate";
@@ -57,12 +53,12 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
 			/** Get a list of all expired event nodes. */
 			List<Node> expiredNodes = JcrUtils
 					  .getWrappedNodesFromQuery(JcrUtils.buildQuery(EVENT, DEACTIVATE_PROPERTY), EVENT, WORKSPACE);
-			log.debug("eventNodes size [" + expiredNodes.size() + "].");
+			LOG.debug("eventNodes size [" + expiredNodes.size() + "].");
 
 			/** Unpublish expired nodes. */
 			unpublishExpiredNodes(context, expiredNodes);
 		} catch (Exception e) {
-			log.error("Exception: ", e);
+			LOG.error("Exception: ", e);
 			return false;
 		}
 		return true;
@@ -71,14 +67,14 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
 	/**
 	 * This method unpublishes the eventCalendar nodes that are expired.
 	 *
-	 * @param context
-	 * @param expiredNodes
+	 * @param context Magnolia context.
+	 * @param expiredNodes List of expired nodes
 	 * @throws javax.jcr.RepositoryException
 	 * @throws info.magnolia.cms.exchange.ExchangeException
 	 */
 	private void unpublishExpiredNodes(Context context, List<Node> expiredNodes) {
 		/** Syndicator init method still needed because there is no other way to set user and workspace.
-		 * Magnolia does the same in there activation module. */
+		 *  Magnolia does the same in there activation module. */
 		syndicator.init(context.getUser(), this.getRepository(), WORKSPACE, new Rule());
 
 		try {
@@ -87,12 +83,12 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
 				/** Saving the removal of the propery on the session because on the node is deprecated. */
 				syndicator.deactivate(ContentUtil.asContent(expiredNode));
 
-				log.debug("Node [" + expiredNode.getName() + "  " + expiredNode.getPath() + "] unpublished.");
+				LOG.debug("Node [" + expiredNode.getName() + "  " + expiredNode.getPath() + "] unpublished.");
 			}
 		} catch (RepositoryException e) {
-			log.error("RepositoryException", e);
+			LOG.error("RepositoryException", e);
 		} catch (ExchangeException e) {
-			log.error("ExchangeException", e);
+			LOG.error("ExchangeException", e);
 		}
 	}
 }

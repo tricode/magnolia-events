@@ -31,7 +31,9 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EventsRenderableDefinition<RD extends RenderableDefinition> extends RenderingModelImpl {
 	private final String EVENT_NODE_TYPE = "mgnl:eventCalendarItem";
@@ -55,6 +57,7 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
 		return super.execute();
 	}
 
+	@SuppressWarnings("unused") //Used in freemarker components.
 	public List<ContentMap> getLatestEvents(String path, String maxResultSize) throws RepositoryException {
 		return getLatest(path, maxResultSize, EVENT_NODE_TYPE, getPageNumber(), EVENT_NODE_TYPE);
 	}
