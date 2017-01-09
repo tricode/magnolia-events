@@ -1,4 +1,4 @@
-/**
+/*
  *      Tricode Event module
  *      Is a Event module for Magnolia CMS.
  *      Copyright (C) 2015  Tricode Business Integrators B.V.
@@ -24,7 +24,9 @@ import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.Rule;
 import info.magnolia.commands.impl.BaseRepositoryCommand;
 import info.magnolia.context.Context;
+import nl.tricode.magnolia.events.EventNodeTypes;
 import nl.tricode.magnolia.events.util.JcrUtils;
+import nl.tricode.magnolia.events.util.NewsRepositoryConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,61 +36,50 @@ import javax.jcr.RepositoryException;
 import java.util.List;
 
 public class DeactivateExpiredEvents extends BaseRepositoryCommand {
-	private static final Logger LOG = LoggerFactory.getLogger(DeactivateExpiredEvents.class);
 
-	private static final String EVENT = "mgnl:eventCalendarItem";
-	private static final String DEACTIVATE_PROPERTY = "unpublishDate";
-	private static final String WORKSPACE = "collaboration";
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateExpiredEvents.class);
+    private static final String DEACTIVATE_PROPERTY = "unpublishDate";
 
-	private Syndicator syndicator;
+    private Syndicator syndicator;
 
-	@Inject
-	public DeactivateExpiredEvents(Syndicator syndicator) {
-		this.syndicator = syndicator;
-	}
+    @Inject
+    public DeactivateExpiredEvents(Syndicator syndicator) {
+        this.syndicator = syndicator;
+    }
 
-	@Override
-	public boolean execute(Context context) {
-		try {
-			/** Get a list of all expired event nodes. */
-			List<Node> expiredNodes = JcrUtils
-					  .getWrappedNodesFromQuery(JcrUtils.buildQuery(EVENT, DEACTIVATE_PROPERTY), EVENT, WORKSPACE);
-			LOG.debug("eventNodes size [" + expiredNodes.size() + "].");
+    @Override
+    public boolean execute(Context context) {
+        try {
+            // Get a list of all expired event nodes
+            List<Node> expiredNodes = JcrUtils.getWrappedNodesFromQuery(
+                    JcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY), EventNodeTypes.Event.NAME, NewsRepositoryConstants.COLLABORATION);
+            LOGGER.debug("eventNodes size [{}].", expiredNodes.size());
 
-			/** Unpublish expired nodes. */
-			unpublishExpiredNodes(context, expiredNodes);
-		} catch (Exception e) {
-			LOG.error("Exception: ", e);
-			return false;
-		}
-		return true;
-	}
+            // Unpublish expired nodes.
+            unpublishExpiredNodes(context, expiredNodes);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return false;
+        }
 
-	/**
-	 * This method unpublishes the eventCalendar nodes that are expired.
-	 *
-	 * @param context Magnolia context.
-	 * @param expiredNodes List of expired nodes
-	 * @throws javax.jcr.RepositoryException
-	 * @throws info.magnolia.cms.exchange.ExchangeException
-	 */
-	private void unpublishExpiredNodes(Context context, List<Node> expiredNodes) {
-		/** Syndicator init method still needed because there is no other way to set user and workspace.
-		 *  Magnolia does the same in there activation module. */
-		syndicator.init(context.getUser(), this.getRepository(), WORKSPACE, new Rule());
+        return true;
+    }
 
-		try {
-			/** Looping the nodes to unpublish */
-			for (Node expiredNode : expiredNodes) {
-				/** Saving the removal of the propery on the session because on the node is deprecated. */
-				syndicator.deactivate(ContentUtil.asContent(expiredNode));
+    private void unpublishExpiredNodes(Context context, List<Node> expiredNodes) {
+        // Syndicator init method still needed because there is no other way to set user and workspace.
+        // Magnolia does the same in their activation module.
+        syndicator.init(context.getUser(), this.getRepository(), NewsRepositoryConstants.COLLABORATION, new Rule());
 
-				LOG.debug("Node [" + expiredNode.getName() + "  " + expiredNode.getPath() + "] unpublished.");
-			}
-		} catch (RepositoryException e) {
-			LOG.error("RepositoryException", e);
-		} catch (ExchangeException e) {
-			LOG.error("ExchangeException", e);
-		}
-	}
+        try {
+            // Looping the nodes to unpublish
+            for (Node expiredNode : expiredNodes) {
+                // Saving the removal of the propery on the session because on the node is deprecated.
+                syndicator.deactivate(ContentUtil.asContent(expiredNode));
+
+                LOGGER.debug("Node [" + expiredNode.getName() + "  " + expiredNode.getPath() + "] unpublished.");
+            }
+        } catch (RepositoryException | ExchangeException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
 }

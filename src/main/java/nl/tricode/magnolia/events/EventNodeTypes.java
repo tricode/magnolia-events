@@ -1,4 +1,4 @@
-/**
+/*
  *      Tricode Event module
  *      Is a Event module for Magnolia CMS.
  *      Copyright (C) 2015  Tricode Business Integrators B.V.
@@ -22,6 +22,11 @@ import info.magnolia.jcr.util.NodeTypes;
 
 @SuppressWarnings("unused") //Node representation in java.
 public class EventNodeTypes {
+
+    private EventNodeTypes() {
+        // Util class, prevent instantiating
+    }
+
     /**
      * Represents the nodeType mgnl:eventCalendarItem.
      */
@@ -37,5 +42,9 @@ public class EventNodeTypes {
         public static final String PROPERTY_SUMMARY = "summary";
         public static final String PROPERTY_STARTDATE = "startDate";
         public static final String PROPERTY_DESCRIPTION = "description";
+
+        private Event() {
+            // Util class, prevent instantiating
+        }
     }
 }

@@ -1,4 +1,4 @@
-/**
+/*
  *      Tricode Event module
  *      Is a Event module for Magnolia CMS.
  *      Copyright (C) 2015  Tricode Business Integrators B.V.

@@ -1,4 +1,4 @@
-/**
+/*
  *      Tricode Event module
  *      Is a Event module for Magnolia CMS.
  *      Copyright (C) 2015  Tricode Business Integrators B.V.
@@ -20,9 +20,6 @@ package nl.tricode.magnolia.events.action;
 
 import info.magnolia.ui.contentapp.browser.action.RestoreItemPreviousVersionActionDefinition;
 
-/**
- * @Author mvdmark
- */
 public class RestorePreviousEventsDefinition extends RestoreItemPreviousVersionActionDefinition {
     private boolean showPreview = true;
 

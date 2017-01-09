@@ -1,4 +1,4 @@
-/**
+/*
  *      Tricode Event module
  *      Is a Event module for Magnolia CMS.
  *      Copyright (C) 2015  Tricode Business Integrators B.V.
@@ -35,10 +35,8 @@ import javax.inject.Named;
 import javax.jcr.Node;
 import java.util.List;
 
-/**
- * @author mvdmark
- */
 public class RestorePreviousEvents extends RestoreItemPreviousVersionAction {
+
     private final LocationController locationController;
 
 	 @SuppressWarnings("unused") //Constructor called by Magnolia.

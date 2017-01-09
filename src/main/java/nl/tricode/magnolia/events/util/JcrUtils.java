@@ -44,7 +44,7 @@ public class JcrUtils {
 	 * @throws javax.jcr.RepositoryException
 	 */
 	public static List<Node> getWrappedNodesFromQuery(String query, int maxResultSize, int pageNumber, String nodeTypeName) throws RepositoryException {
-		return getWrappedNodesFromQuery(query, maxResultSize, pageNumber, nodeTypeName, EventsWorkspaceUtil.COLLABORATION);
+		return getWrappedNodesFromQuery(query, maxResultSize, pageNumber, nodeTypeName, NewsRepositoryConstants.COLLABORATION);
 	}
 
 	/**

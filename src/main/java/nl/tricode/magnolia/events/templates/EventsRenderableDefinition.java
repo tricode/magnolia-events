@@ -1,4 +1,4 @@
-/**
+/*
  *      Tricode Event module
  *      Is a Event module for Magnolia CMS.
  *      Copyright (C) 2015  Tricode Business Integrators B.V.
@@ -25,6 +25,7 @@ import info.magnolia.rendering.model.RenderingModel;
 import info.magnolia.rendering.model.RenderingModelImpl;
 import info.magnolia.rendering.template.RenderableDefinition;
 import info.magnolia.templating.functions.TemplatingFunctions;
+import nl.tricode.magnolia.events.EventNodeTypes;
 import nl.tricode.magnolia.events.util.JcrUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -36,50 +37,51 @@ import java.util.List;
 import java.util.Map;
 
 public class EventsRenderableDefinition<RD extends RenderableDefinition> extends RenderingModelImpl {
-	private final String EVENT_NODE_TYPE = "mgnl:eventCalendarItem";
-	private static final String PARAM_PAGE = "page";
-	private static final int DEFAULT_LATEST_COUNT = 5;
-	private final Map<String, String> filter;
-	private final WebContext webContext = MgnlContext.getWebContext();
 
-	protected final TemplatingFunctions templatingFunctions;
+    private static final String PARAM_PAGE = "page";
+    private static final int DEFAULT_LATEST_COUNT = 5;
 
-	@Inject
-	public EventsRenderableDefinition(Node content, RD definition, RenderingModel<?> parent, TemplatingFunctions templatingFunctions) {
-		super(content, definition, parent);
-		this.templatingFunctions = templatingFunctions;
-		filter = new HashMap<>();
-	}
+    private final TemplatingFunctions templatingFunctions;
+    private final Map<String, String> filter;
+    private final WebContext webContext = MgnlContext.getWebContext();
 
-	@Override
-	public String execute() {
-		webContext.getResponse().setHeader("Cache-Control", "no-cache");
-		return super.execute();
-	}
+    @Inject
+    public EventsRenderableDefinition(Node content, RD definition, RenderingModel<?> parent, TemplatingFunctions templatingFunctions) {
+        super(content, definition, parent);
+        this.templatingFunctions = templatingFunctions;
+        filter = new HashMap<>();
+    }
 
-	@SuppressWarnings("unused") //Used in freemarker components.
-	public List<ContentMap> getLatestEvents(String path, String maxResultSize) throws RepositoryException {
-		return getLatest(path, maxResultSize, EVENT_NODE_TYPE, getPageNumber(), EVENT_NODE_TYPE);
-	}
+    @Override
+    public String execute() {
+        webContext.getResponse().setHeader("Cache-Control", "no-cache");
+        return super.execute();
+    }
 
-	private int getPageNumber() {
-		int pageNumber = 1;
-		if (filter.containsKey(PARAM_PAGE)) {
-			pageNumber = Integer.parseInt(filter.get(PARAM_PAGE));
-		}
-		return pageNumber;
-	}
+    @SuppressWarnings("unused") //Used in freemarker components.
+    public List<ContentMap> getLatestEvents(String path, String maxResultSize) throws RepositoryException {
+        return getLatest(path, maxResultSize, EventNodeTypes.Event.NAME, getPageNumber(), EventNodeTypes.Event.NAME);
+    }
 
-	public TemplatingFunctions getTemplatingFunctions() {
-		return templatingFunctions;
-	}
+    public TemplatingFunctions getTemplatingFunctions() {
+        return templatingFunctions;
+    }
 
-	public List<ContentMap> getLatest(String path, String maxResultSize, String nodeType, int pageNumber, String nodeTypeName) throws RepositoryException {
-		int resultSize = DEFAULT_LATEST_COUNT;
-		if (StringUtils.isNumeric(maxResultSize)) {
-			resultSize = Integer.parseInt(maxResultSize);
-		}
-		final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType);
-		return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
-	}
+    public List<ContentMap> getLatest(String path, String maxResultSize, String nodeType, int pageNumber, String nodeTypeName) throws RepositoryException {
+        int resultSize = DEFAULT_LATEST_COUNT;
+        if (StringUtils.isNumeric(maxResultSize)) {
+            resultSize = Integer.parseInt(maxResultSize);
+        }
+        final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType);
+        return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
+    }
+
+    private int getPageNumber() {
+        int pageNumber = 1;
+        if (filter.containsKey(PARAM_PAGE)) {
+            pageNumber = Integer.parseInt(filter.get(PARAM_PAGE));
+        }
+        return pageNumber;
+    }
+
 }
