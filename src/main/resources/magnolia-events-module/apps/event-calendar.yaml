@@ -343,7 +343,6 @@ subApps:
                 i18n: true
                 class: info.magnolia.ui.form.field.definition.TextFieldDefinition
               - name: organizer
-                i18nBasename: mgnl-i18n.app-event-calendar-messages
                 buttonSelectOtherLabel: event-calendar.extras.organizer.link.select.another
                 buttonSelectNewLabel: event-calendar.extras.organizer.link.select.new
                 targetWorkspace: contacts
@@ -352,7 +351,6 @@ subApps:
                 identifierToPathConverter:
                   class: info.magnolia.ui.form.field.converter.BaseIdentifierToPathConverter
               - name: performer
-                i18nBasename: mgnl-i18n.app-event-calendar-messages
                 buttonSelectOtherLabel: event-calendar.extras.performer.link.select.another
                 buttonSelectNewLabel: event-calendar.extras.performer.link.select.new
                 targetWorkspace: contacts
