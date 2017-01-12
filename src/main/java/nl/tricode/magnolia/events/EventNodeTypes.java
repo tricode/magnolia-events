@@ -42,6 +42,7 @@ public class EventNodeTypes {
         public static final String PROPERTY_SUMMARY = "summary";
         public static final String PROPERTY_STARTDATE = "startDate";
         public static final String PROPERTY_DESCRIPTION = "description";
+        public static final String PROPERTY_CATEGORIES = "categories";
 
         private Event() {
             // Util class, prevent instantiating

@@ -29,13 +29,12 @@
             <version>2.2/*</version>
         </dependency>
         <dependency>
-            <name>tricode-tags</name>
-            <version>1.0/*</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <name>contacts</name>
             <version>1.0/*</version>
+        </dependency>
+        <dependency>
+            <name>categorization-support</name>
+            <version>2.5/*</version>
         </dependency>
     </dependencies>
 

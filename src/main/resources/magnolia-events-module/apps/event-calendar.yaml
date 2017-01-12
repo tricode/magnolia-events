@@ -293,7 +293,7 @@ subApps:
         - name: cancel
       form:
         tabs:
-          - name: eventItem
+          - name: tabEventItem
             fields:
               - name: eventName
                 i18n: true
@@ -306,7 +306,7 @@ subApps:
                 class: info.magnolia.ui.form.field.definition.TextFieldDefinition
               - name: description
                 i18n: true
-                configJsFile: /.resources/magnolia-events-module/ckeditor/config-richtext.js
+                configJsFile: /.resources/magnolia-events-module/webresources/js/ckeditor/config-richtext.js
                 required: true
                 class: info.magnolia.ui.form.field.definition.RichTextFieldDefinition
               - name: startDate
@@ -329,7 +329,7 @@ subApps:
                 time: true
                 type: Date
                 class: info.magnolia.ui.form.field.definition.DateFieldDefinition
-          - name: extras
+          - name: tabExtras
             fields:
               - name: alternateName
                 i18n: true
@@ -367,6 +367,21 @@ subApps:
               - name: price
                 i18n: true
                 class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+          - name: tabCategories
+            fields:
+              - name: categories
+                label: event-calendar.tabCategories.categories.label
+                class: info.magnolia.ui.form.field.definition.MultiValueFieldDefinition
+                buttonSelectAddLabel: event-calendar.tabCategories.categories.add.label
+                field:
+                  name: linkField
+                  class: info.magnolia.ui.form.field.definition.LinkFieldDefinition
+                  targetWorkspace: category
+                  appName: categories
+                  fieldEditable: false
+                  buttonSelectNewLabel: event-calendar.tabCategories.categories.linkField.select.label
+                  identifierToPathConverter:
+                    class: info.magnolia.ui.form.field.converter.BaseIdentifierToPathConverter
     actions:
       commit:
         propertyName: eventName

@@ -5,8 +5,9 @@ import info.magnolia.repository.RepositoryConstants;
 /**
  * Project-specific extension to constants used in the context of repository.
  */
-public interface NewsRepositoryConstants extends RepositoryConstants {
+public interface EventsRepositoryConstants extends RepositoryConstants {
 
     String COLLABORATION = "collaboration";
+    String CATEGORY = "category";
 
 }

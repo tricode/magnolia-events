@@ -26,7 +26,7 @@ import info.magnolia.commands.impl.BaseRepositoryCommand;
 import info.magnolia.context.Context;
 import nl.tricode.magnolia.events.EventNodeTypes;
 import nl.tricode.magnolia.events.util.JcrUtils;
-import nl.tricode.magnolia.events.util.NewsRepositoryConstants;
+import nl.tricode.magnolia.events.util.EventsRepositoryConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
         try {
             // Get a list of all expired event nodes
             List<Node> expiredNodes = JcrUtils.getWrappedNodesFromQuery(
-                    JcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY), EventNodeTypes.Event.NAME, NewsRepositoryConstants.COLLABORATION);
+                    JcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY), EventNodeTypes.Event.NAME, EventsRepositoryConstants.COLLABORATION);
             LOGGER.debug("eventNodes size [{}].", expiredNodes.size());
 
             // Unpublish expired nodes.
@@ -68,7 +68,7 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
     private void unpublishExpiredNodes(Context context, List<Node> expiredNodes) {
         // Syndicator init method still needed because there is no other way to set user and workspace.
         // Magnolia does the same in their activation module.
-        syndicator.init(context.getUser(), this.getRepository(), NewsRepositoryConstants.COLLABORATION, new Rule());
+        syndicator.init(context.getUser(), this.getRepository(), EventsRepositoryConstants.COLLABORATION, new Rule());
 
         try {
             // Looping the nodes to unpublish
