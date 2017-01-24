@@ -41,7 +41,7 @@ subApps:
       editFolder:
         dialogName: tricode-events:folder
         icon: icon-edit
-        nodeType: mgnl:eventsFolder
+#        nodeType: mgnl:eventsFolder
         class: info.magnolia.ui.framework.action.OpenEditDialogActionDefinition
       deleteFolder:
         icon: icon-delete
@@ -275,7 +275,7 @@ subApps:
       includeProperties: false
       workspace: collaboration
       defaultOrder: name
-      path: /
+#      path: /
       nodeTypes:
         - name: mgnl:eventCalendarItem
           icon: icon-datepicker
@@ -343,16 +343,16 @@ subApps:
                 i18n: true
                 class: info.magnolia.ui.form.field.definition.TextFieldDefinition
               - name: organizer
-                buttonSelectOtherLabel: event-calendar.extras.organizer.link.select.another
-                buttonSelectNewLabel: event-calendar.extras.organizer.link.select.new
+#                buttonSelectOtherLabel: event-calendar.extras.organizer.link.select.another
+#                buttonSelectNewLabel: event-calendar.extras.organizer.link.select.new
                 targetWorkspace: contacts
                 appName: contacts
                 class: info.magnolia.ui.form.field.definition.LinkFieldDefinition
                 identifierToPathConverter:
                   class: info.magnolia.ui.form.field.converter.BaseIdentifierToPathConverter
               - name: performer
-                buttonSelectOtherLabel: event-calendar.extras.performer.link.select.another
-                buttonSelectNewLabel: event-calendar.extras.performer.link.select.new
+#                buttonSelectOtherLabel: event-calendar.extras.performer.link.select.another
+#                buttonSelectNewLabel: event-calendar.extras.performer.link.select.new
                 targetWorkspace: contacts
                 appName: contacts
                 class: info.magnolia.ui.form.field.definition.LinkFieldDefinition
@@ -370,16 +370,16 @@ subApps:
           - name: tabCategories
             fields:
               - name: categories
-                label: event-calendar.tabCategories.categories.label
+#                label: event-calendar.tabCategories.categories.label
                 class: info.magnolia.ui.form.field.definition.MultiValueFieldDefinition
-                buttonSelectAddLabel: event-calendar.tabCategories.categories.add.label
+#                buttonSelectAddLabel: event-calendar.tabCategories.categories.add.label
                 field:
                   name: linkField
                   class: info.magnolia.ui.form.field.definition.LinkFieldDefinition
                   targetWorkspace: category
                   appName: categories
                   fieldEditable: false
-                  buttonSelectNewLabel: event-calendar.tabCategories.categories.linkField.select.label
+#                  buttonSelectNewLabel: event-calendar.tabCategories.categories.linkField.select.label
                   identifierToPathConverter:
                     class: info.magnolia.ui.form.field.converter.BaseIdentifierToPathConverter
     actions:

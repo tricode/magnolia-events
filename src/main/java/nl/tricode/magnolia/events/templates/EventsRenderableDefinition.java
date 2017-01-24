@@ -18,6 +18,7 @@
  */
 package nl.tricode.magnolia.events.templates;
 
+import com.google.common.collect.Maps;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.context.WebContext;
 import info.magnolia.jcr.util.ContentMap;
@@ -28,6 +29,7 @@ import info.magnolia.templating.functions.TemplatingFunctions;
 import nl.tricode.magnolia.events.EventNodeTypes;
 import nl.tricode.magnolia.events.util.EventsRepositoryConstants;
 import nl.tricode.magnolia.events.util.JcrUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,15 +38,26 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class EventsRenderableDefinition<RD extends RenderableDefinition> extends RenderingModelImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsRenderableDefinition.class);
     private static final int DEFAULT_LATEST_COUNT = 5;
+    private static final String PARAM_CATEGORY = "category";
+    private static final String PARAM_AUTHOR = "author";
+    private static final String PARAM_PAGE = "page";
+    private static final String PARAM_YEAR = "year";
+    private static final String PARAM_MONTH = "month";
+    private static final List<String> WHITELISTED_PARAMETERS = Arrays.asList(PARAM_CATEGORY, PARAM_AUTHOR, PARAM_PAGE, PARAM_YEAR, PARAM_MONTH);
 
     private final TemplatingFunctions templatingFunctions;
     private final WebContext webContext = MgnlContext.getWebContext();
+
+    private final Map<String, String> filter;
 
     @Inject
     public EventsRenderableDefinition(Node content,
@@ -53,6 +66,18 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
                                       TemplatingFunctions templatingFunctions) {
         super(content, definition, parent);
         this.templatingFunctions = templatingFunctions;
+
+        filter = Maps.newHashMap();
+
+        final Iterator<Map.Entry<String, String>> it = MgnlContext.getWebContext().getParameters().entrySet().iterator();
+        while (it.hasNext()) {
+            final Map.Entry<String, String> pairs = it.next();
+            if (WHITELISTED_PARAMETERS.contains(pairs.getKey()) && StringUtils.isNotEmpty(pairs.getValue())) {
+                filter.put(pairs.getKey(), pairs.getValue());
+                LOGGER.debug("Added to filter: {}", pairs.getKey());
+            }
+            it.remove(); // avoids a ConcurrentModificationException
+        }
     }
 
     @Override
@@ -96,6 +121,77 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
             LOGGER.error("Exception while getting categories: {}", e.getMessage());
         }
         return categories;
+    }
+
+    /**
+     * Get latest nodes of type mgnl:blog.
+     *
+     * @param path          Start node path in hierarchy
+     * @param maxResultSize Number of items to return. When empty <code>5</code> will be used.
+     * @return List of blog nodes sorted by date created in descending order
+     * @throws RepositoryException
+     */
+    @SuppressWarnings("unused") //Used in freemarker components.
+    public List<ContentMap> getLatestEvents(String path, String maxResultSize) throws RepositoryException {
+        return getLatest(path, maxResultSize, EventNodeTypes.Event.NAME, getPageNumber(), EventNodeTypes.Event.NAME);
+    }
+
+    /**
+     * @param path          Repository path
+     * @param maxResultSize the result size that is returned
+     * @param categoryUuid  the category uuid to take only the events from this category
+     * @return a list of event nodes sorted by date created in descending order for the specified maxResultSize parameter
+     * @throws RepositoryException
+     */
+    @SuppressWarnings("unused") //Used in freemarker components.
+    public List<ContentMap> getLatestEvents(String path, String maxResultSize, String categoryUuid) throws RepositoryException {
+        int resultSize = DEFAULT_LATEST_COUNT;
+        if (StringUtils.isNumeric(maxResultSize)) {
+            resultSize = Integer.parseInt(maxResultSize);
+        }
+        StringBuilder queryString = formQueryString(new StringBuilder(), categoryUuid);
+        return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(
+                "SELECT p.* from [mgnl:event] AS p WHERE ISDESCENDANTNODE(p,'/') AND CONTAINS(p.categories, '" +
+                        categoryUuid + "') " + queryString + " ORDER BY p.[mgnl:created] desc",
+                resultSize, 1, EventNodeTypes.Event.NAME));
+    }
+
+    @SuppressWarnings("unused") //Used in freemarker components.
+    public int getPageNumber() {
+        int pageNumber = 1;
+        if (filter.containsKey(PARAM_PAGE)) {
+            pageNumber = Integer.parseInt(filter.get(PARAM_PAGE));
+        }
+        return pageNumber;
+    }
+
+    /**
+     * Forms a query string like this "OR CONTAINS(p.categories, '"uuid"')" and appends it to each other.
+     *
+     * @param query        a new StringBuilder to keep the content on recursive calls
+     * @param categoryUuid the uuid of the category
+     * @return a query string used to filter the blogs by categories
+     * @throws RepositoryException
+     */
+    private StringBuilder formQueryString(StringBuilder query, String categoryUuid) throws RepositoryException {
+        List<ContentMap> childCategories = templatingFunctions.children(templatingFunctions.contentById(categoryUuid, EventsRepositoryConstants.CATEGORY));
+
+        for (ContentMap childCategory : childCategories) {
+            if (!templatingFunctions.children(childCategory).isEmpty()) {
+                formQueryString(query, childCategory.getJCRNode().getIdentifier());
+            }
+            query.append("OR CONTAINS(p.categories, '").append(childCategory.getJCRNode().getIdentifier()).append("') ");
+        }
+        return query;
+    }
+
+    private List<ContentMap> getLatest(String path, String maxResultSize, String nodeType, int pageNumber, String nodeTypeName) throws RepositoryException {
+        int resultSize = DEFAULT_LATEST_COUNT;
+        if (StringUtils.isNumeric(maxResultSize)) {
+            resultSize = Integer.parseInt(maxResultSize);
+        }
+        final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType);
+        return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
     }
 
 }
