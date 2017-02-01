@@ -27,6 +27,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.Query;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -80,12 +81,16 @@ public class JcrUtils {
         return itemsListPaged;
     }
 
-    public static String buildQuery(String path, String contentType) {
+    public static String buildQuery(String path, String contentType, boolean publishedEventsOnly) {
         StringBuilder query = new StringBuilder();
         query.append("SELECT p.* FROM [").append(contentType).append("] AS p ");
         query.append("WHERE ISDESCENDANTNODE(p, '").append(org.apache.commons.lang.StringUtils.defaultIfEmpty(path, "/")).append("') ");
+        if(publishedEventsOnly){
+            query.append("AND ( p.unpublishDate = '' OR ( p.unpublishDate <> '' AND p.unpublishDate > CAST('").append(LocalDateTime.now()).append("' AS DATE)))");
+        }
         query.append("ORDER BY p.[mgnl:created] desc");
 
+        LOGGER.debug("publishedEventsOnly", String.valueOf(publishedEventsOnly));
         LOGGER.debug("BuildQuery [{}].", query.toString());
         return query.toString();
     }
