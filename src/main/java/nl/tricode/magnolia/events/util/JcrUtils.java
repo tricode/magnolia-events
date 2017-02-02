@@ -90,7 +90,6 @@ public class JcrUtils {
         }
         query.append("ORDER BY p.[mgnl:created] desc");
 
-        LOGGER.debug("publishedEventsOnly", String.valueOf(publishedEventsOnly));
         LOGGER.debug("BuildQuery [{}].", query.toString());
         return query.toString();
     }
