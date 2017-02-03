@@ -52,7 +52,7 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
         try {
             // Get a list of all expired event nodes
             List<Node> expiredNodes = JcrUtils.getWrappedNodesFromQuery(
-                    JcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY), EventNodeTypes.Event.NAME, EventsRepositoryConstants.COLLABORATION);
+                    JcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY, false), EventNodeTypes.Event.NAME, EventsRepositoryConstants.COLLABORATION);
             LOGGER.debug("eventNodes size [{}].", expiredNodes.size());
 
             // Unpublish expired nodes.

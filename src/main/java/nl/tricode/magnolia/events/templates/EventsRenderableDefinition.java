@@ -93,7 +93,7 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
      */
     @SuppressWarnings("unused") //Used in freemarker components.
     public List<ContentMap> getEvents(final String path) throws RepositoryException {
-        final String query = JcrUtils.buildQuery(path, EventNodeTypes.Event.NAME);
+        final String query = JcrUtils.buildQuery(path, EventNodeTypes.Event.NAME, false);
 
         return templatingFunctions.asContentMapList(
                 JcrUtils.getWrappedNodesFromQuery(query, DEFAULT_LATEST_COUNT, 1, EventNodeTypes.Event.NAME)
@@ -124,16 +124,16 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
     }
 
     /**
-     * Get latest nodes of type mgnl:blog.
+     * Get latest nodes of type mgnl:eventCalendarItem.
      *
      * @param path          Start node path in hierarchy
      * @param maxResultSize Number of items to return. When empty <code>5</code> will be used.
-     * @return List of blog nodes sorted by date created in descending order
+     * @return List of event nodes sorted by date created in descending order
      * @throws RepositoryException
      */
     @SuppressWarnings("unused") //Used in freemarker components.
-    public List<ContentMap> getLatestEvents(String path, String maxResultSize) throws RepositoryException {
-        return getLatest(path, maxResultSize, EventNodeTypes.Event.NAME, getPageNumber(), EventNodeTypes.Event.NAME);
+    public List<ContentMap> getLatestEvents(String path, String maxResultSize, boolean publishedEventsOnly) throws RepositoryException {
+        return getLatest(path, maxResultSize, EventNodeTypes.Event.NAME, getPageNumber(), EventNodeTypes.Event.NAME, publishedEventsOnly);
     }
 
     /**
@@ -185,12 +185,12 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
         return query;
     }
 
-    private List<ContentMap> getLatest(String path, String maxResultSize, String nodeType, int pageNumber, String nodeTypeName) throws RepositoryException {
+    private List<ContentMap> getLatest(String path, String maxResultSize, String nodeType, int pageNumber, String nodeTypeName, boolean publishedEventsOnly) throws RepositoryException {
         int resultSize = DEFAULT_LATEST_COUNT;
         if (StringUtils.isNumeric(maxResultSize)) {
             resultSize = Integer.parseInt(maxResultSize);
         }
-        final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType);
+        final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType, publishedEventsOnly);
         return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
     }
 
