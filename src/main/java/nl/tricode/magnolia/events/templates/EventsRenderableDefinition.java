@@ -87,8 +87,8 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
     }
 
     /**
-     * @param path
-     * @return
+     * @param path Start node path in hierarchy
+     * @return List of event nodes
      * @throws RepositoryException
      */
     @SuppressWarnings("unused") //Used in freemarker components.
@@ -128,6 +128,7 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
      *
      * @param path          Start node path in hierarchy
      * @param maxResultSize Number of items to return. When empty <code>5</code> will be used.
+     * @param publishedEventsOnly Check if the result list should be filled only with public events
      * @return List of event nodes sorted by date created in descending order
      * @throws RepositoryException
      */

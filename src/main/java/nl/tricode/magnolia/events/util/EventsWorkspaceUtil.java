@@ -32,6 +32,11 @@ public class EventsWorkspaceUtil {
 
     /**
      * Create a new Node Unique NodeName.
+     *
+     * @param node The node that is used to generate a unique name
+     * @param propertyName A property name
+     * @return Unique node name as String
+     * @throws RepositoryException
      */
     public static String generateUniqueNodeName(final Node node, String propertyName) throws RepositoryException {
         String newNodeName = EventsWorkspaceUtil.defineNodeName(node, propertyName);

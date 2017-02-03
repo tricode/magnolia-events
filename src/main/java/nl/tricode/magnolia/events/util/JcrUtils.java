@@ -46,7 +46,8 @@ public class JcrUtils {
      * @param query         Query string
      * @param maxResultSize Max results returned
      * @param pageNumber    paging number
-     * @return List<Node> List of event nodes
+     * @param nodeTypeName Name of the node type
+     * @return List of event nodes
      * @throws javax.jcr.RepositoryException
      */
     public static List<Node> getWrappedNodesFromQuery(String query, int maxResultSize, int pageNumber, String nodeTypeName) throws RepositoryException {
