@@ -25,3 +25,6 @@ Copyright (c) 2015 Tricode and contributors. Released under a [GNUv3 license](ht
 ##Release notes 1.1.2
 * Update to Magnolia 5.5
 * Update to Java 8
+
+##Release notes 1.1.3
+* JavaDoc fixes

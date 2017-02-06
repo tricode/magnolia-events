@@ -1,5 +1,3 @@
-title: Event items
-description: Shows a list of event items
 renderType: freemarker
-templateScript: /magnolia-events-module/templates/components/eventItems.ftl
 modelClass: nl.tricode.magnolia.events.templates.EventsRenderableDefinition
+templateScript: /magnolia-events-module/templates/components/eventItems.ftl
