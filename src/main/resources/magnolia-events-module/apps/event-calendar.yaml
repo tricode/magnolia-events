@@ -39,7 +39,7 @@ subApps:
         availability:
           root: true
       editFolder:
-        dialogName: tricode-events:folder
+        dialogName: magnolia-events-module:folder
         icon: icon-edit
         class: info.magnolia.ui.framework.action.OpenEditDialogActionDefinition
       deleteFolder:
@@ -66,7 +66,7 @@ subApps:
         command: export
         icon: icon-export
         class: info.magnolia.ui.framework.action.ExportActionDefinition
-      confirmDeletion:
+      confirmDeleteEventItem:
         successActionName: deleteEventItem
         icon: icon-delete
         class: info.magnolia.ui.framework.action.ConfirmationActionDefinition
@@ -127,9 +127,8 @@ subApps:
           groups:
             - name: editActions
               items:
-                - name: addEventItem
                 - name: editEventItem
-                - name: confirmDeletion
+                - name: confirmDeleteEventItem
             - name: activationActions
               items:
                 - name: activate

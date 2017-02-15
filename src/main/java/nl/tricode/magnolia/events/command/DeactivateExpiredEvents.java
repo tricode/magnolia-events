@@ -25,7 +25,7 @@ import info.magnolia.cms.util.Rule;
 import info.magnolia.commands.impl.BaseRepositoryCommand;
 import info.magnolia.context.Context;
 import nl.tricode.magnolia.events.EventNodeTypes;
-import nl.tricode.magnolia.events.util.JcrUtils;
+import nl.tricode.magnolia.events.util.EventsJcrUtils;
 import nl.tricode.magnolia.events.util.EventsRepositoryConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +51,8 @@ public class DeactivateExpiredEvents extends BaseRepositoryCommand {
     public boolean execute(Context context) {
         try {
             // Get a list of all expired event nodes
-            List<Node> expiredNodes = JcrUtils.getWrappedNodesFromQuery(
-                    JcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY, false), EventNodeTypes.Event.NAME, EventsRepositoryConstants.COLLABORATION);
+            List<Node> expiredNodes = EventsJcrUtils.getWrappedNodesFromQuery(
+                    EventsJcrUtils.buildQuery(EventNodeTypes.Event.NAME, DEACTIVATE_PROPERTY, false), EventNodeTypes.Event.NAME, EventsRepositoryConstants.COLLABORATION);
             LOGGER.debug("eventNodes size [{}].", expiredNodes.size());
 
             // Unpublish expired nodes.

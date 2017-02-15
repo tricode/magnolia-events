@@ -18,9 +18,11 @@
  */
 package nl.tricode.magnolia.events.setup;
 
+import com.google.common.collect.Lists;
 import info.magnolia.module.DefaultModuleVersionHandler;
 import info.magnolia.module.InstallContext;
 import info.magnolia.module.delta.DeltaBuilder;
+import info.magnolia.module.delta.MoveNodeTask;
 import info.magnolia.module.delta.RemoveNodeTask;
 import info.magnolia.module.delta.Task;
 
@@ -44,6 +46,10 @@ public class EventsVersionHandler extends DefaultModuleVersionHandler {
                 .addTask(new RemoveNodeTask("Remove old nodes", "/modules/" + MODULE_NAME + "/apps"))
                 .addTask(new RemoveNodeTask("Remove old nodes", "/modules/" + MODULE_NAME + "/dialogs"))
         );
+
+        register(DeltaBuilder.update("1.1.4", "Un-nesting events")
+                .addTask(new FindAndMoveNestedEventsTask())
+        );
     }
 
     /**
@@ -54,8 +60,7 @@ public class EventsVersionHandler extends DefaultModuleVersionHandler {
      */
     @Override
     protected List<Task> getExtraInstallTasks(InstallContext installContext) {
-        final List<Task> tasks = new ArrayList<>();
-        tasks.addAll(super.getExtraInstallTasks(installContext));
+        final List<Task> tasks = Lists.newArrayList(super.getExtraInstallTasks(installContext));
 
         return tasks;
     }

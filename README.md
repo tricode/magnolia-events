@@ -28,3 +28,8 @@ Copyright (c) 2015 Tricode and contributors. Released under a [GNUv3 license](ht
 
 ##Release notes 1.1.3
 * JavaDoc fixes
+
+##Release notes 1.1.4
+* Prevent nesting of events within events (+ un-nest any incorrect encountered)
+* Fix 'rename event folder' dialog
+* Fix labels

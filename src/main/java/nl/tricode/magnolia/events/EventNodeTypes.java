@@ -34,9 +34,6 @@ public class EventNodeTypes {
         // Node Type Name
         public static final String NAME = NodeTypes.MGNL_PREFIX + "eventCalendarItem";
 
-        // Node Type Folder
-        public static final String FOLDER = NodeTypes.MGNL_PREFIX + "eventsFolder";
-
         // Property Name
         public static final String PROPERTY_EVENTNAME = "eventName";
         public static final String PROPERTY_SUMMARY = "summary";
@@ -45,6 +42,18 @@ public class EventNodeTypes {
         public static final String PROPERTY_CATEGORIES = "categories";
 
         private Event() {
+            // Util class, prevent instantiating
+        }
+    }
+
+    /**
+     * Represents the nodeType mgnl:eventsFolder.
+     */
+    public static class Folder {
+        // Node Type Name
+        public static final String NAME = NodeTypes.MGNL_PREFIX + "eventsFolder";
+
+        private Folder() {
             // Util class, prevent instantiating
         }
     }

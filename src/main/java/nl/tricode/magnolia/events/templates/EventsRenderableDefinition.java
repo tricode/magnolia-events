@@ -28,7 +28,7 @@ import info.magnolia.rendering.template.RenderableDefinition;
 import info.magnolia.templating.functions.TemplatingFunctions;
 import nl.tricode.magnolia.events.EventNodeTypes;
 import nl.tricode.magnolia.events.util.EventsRepositoryConstants;
-import nl.tricode.magnolia.events.util.JcrUtils;
+import nl.tricode.magnolia.events.util.EventsJcrUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,10 +93,10 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
      */
     @SuppressWarnings("unused") //Used in freemarker components.
     public List<ContentMap> getEvents(final String path) throws RepositoryException {
-        final String query = JcrUtils.buildQuery(path, EventNodeTypes.Event.NAME, false);
+        final String query = EventsJcrUtils.buildQuery(path, EventNodeTypes.Event.NAME, false);
 
         return templatingFunctions.asContentMapList(
-                JcrUtils.getWrappedNodesFromQuery(query, DEFAULT_LATEST_COUNT, 1, EventNodeTypes.Event.NAME)
+                EventsJcrUtils.getWrappedNodesFromQuery(query, DEFAULT_LATEST_COUNT, 1, EventNodeTypes.Event.NAME)
         );
     }
 
@@ -151,7 +151,7 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
             resultSize = Integer.parseInt(maxResultSize);
         }
         StringBuilder queryString = formQueryString(new StringBuilder(), categoryUuid);
-        return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(
+        return templatingFunctions.asContentMapList(EventsJcrUtils.getWrappedNodesFromQuery(
                 "SELECT p.* from [mgnl:event] AS p WHERE ISDESCENDANTNODE(p,'/') AND CONTAINS(p.categories, '" +
                         categoryUuid + "') " + queryString + " ORDER BY p.[mgnl:created] desc",
                 resultSize, 1, EventNodeTypes.Event.NAME));
@@ -191,8 +191,8 @@ public class EventsRenderableDefinition<RD extends RenderableDefinition> extends
         if (StringUtils.isNumeric(maxResultSize)) {
             resultSize = Integer.parseInt(maxResultSize);
         }
-        final String sqlBlogItems = JcrUtils.buildQuery(path, nodeType, publishedEventsOnly);
-        return templatingFunctions.asContentMapList(JcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
+        final String sqlBlogItems = EventsJcrUtils.buildQuery(path, nodeType, publishedEventsOnly);
+        return templatingFunctions.asContentMapList(EventsJcrUtils.getWrappedNodesFromQuery(sqlBlogItems, resultSize, pageNumber, nodeTypeName));
     }
 
 }
