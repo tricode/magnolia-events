@@ -33,3 +33,6 @@ Copyright (c) 2015 Tricode and contributors. Released under a [GNUv3 license](ht
 * Prevent nesting of events within events (+ un-nest any incorrect encountered)
 * Fix 'rename event folder' dialog
 * Fix labels
+
+##Release notes 1.1.5
+* Update to Magnolia 5.5.3 + Nexus URL update
