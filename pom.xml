@@ -12,29 +12,10 @@
         <url>http://www.tricode.nl</url>
     </organization>
 
-    <scm>
-        <connection>scm:git:git@github.com:tricode/magnolia-events.git</connection>
-        <developerConnection>scm:git:git@github.com:tricode/magnolia-events.git</developerConnection>
-        <url>https://github.com/tricode/magnolia-events.git</url>
-        <tag>HEAD</tag>
-    </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>tricode-magnolia-releases</id>
-            <name>Tricode Magnolia Releases</name>
-            <url>http://repo.tricode.nl/content/repositories/magnolia_github_releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>tricode-magnolia-snapshots</id>
-            <name>Tricode Magnolia Snapshots</name>
-            <url>http://repo.tricode.nl/content/repositories/magnolia_github_snapshots/</url>
-            <uniqueVersion>true</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
 
     <properties>
-        <magnoliaVersion>5.5.1</magnoliaVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <magnoliaVersion>5.5.3</magnoliaVersion>
         <javaVersion>1.8</javaVersion>
     </properties>
 
@@ -177,4 +158,26 @@
             </resource>
         </resources>
     </build>
+
+    <scm>
+        <connection>scm:git:git@github.com:tricode/magnolia-events.git</connection>
+        <developerConnection>scm:git:git@github.com:tricode/magnolia-events.git</developerConnection>
+        <url>https://github.com/tricode/magnolia-events.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>tricode-magnolia-releases</id>
+            <name>Tricode Magnolia Releases</name>
+            <url>http://artifacts.tricode.nl/content/repositories/magnolia_github_releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>tricode-magnolia-snapshots</id>
+            <name>Tricode Magnolia Snapshots</name>
+            <url>http://artifacts.tricode.nl/content/repositories/magnolia_github_snapshots/</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
